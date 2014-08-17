@@ -10,24 +10,48 @@ if (!file.exists("activity.csv")) {
 }
 
 activity = read.csv("activity.csv");
-activity$date = as.POSIXlt(activity$date, "%YYYY-%MM-%DD");
+activity = activity[complete.cases(activity),];
 ```
 
 ## What is mean total number of steps taken per day?
 
 ```{r}
-x = activity[complete.cases(activity),];
-dailyMeans = tapply(x$steps,INDEX=x$date, FUN=mean);
+dailyMeans = tapply(activity$steps,INDEX=activity$date, FUN=mean);
 hist(dailyMeans);
-abline(h=mean(dailyMeans, na.rm=T), col=1, lty=3);
-abline(h=median(dailyMeans, na.rm=T), col=2, lty=4);
 ```
+  
+Please see mean of total number of steps taken per day:
+
+```{r}
+print(mean(dailyMeans, na.rm=T));
+```
+
+  
+Please see median of total number of steps taken per day:
+```{r}
+print(median(dailyMeans, na.rm=T));
+```
+
 
 ## What is the average daily activity pattern?
 
 ```{r}
-plot(type="l")
+patterns = tapply(activity$steps, INDEX=activity$interval, FUN=mean);
+plot(patterns, type="l")
 ```
+
+  
+Maximum interval value was:
+```{r}
+print(maximum(pattern));
+```
+
+  
+For an interval:
+```{r}
+print(names(patterns)[match(maximum(pattern))]);
+```
+
 
 ## Imputing missing values
 
